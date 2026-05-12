@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+/* Tailwind v4 class-based dark mode */
+@variant dark (&:where(.dark, .dark *));
+
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 3px; }
+.dark ::-webkit-scrollbar-thumb { background: #475569; }
+
+/* Smooth theme transition */
+*, *::before, *::after {
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+@media print {
+  .no-print { display: none !important; }
+  body { background: white !important; color: black !important; }
+  * { transition: none !important; }
+}
