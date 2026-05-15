@@ -32,7 +32,7 @@ export default function NewQuote({ onSaved, onCancel, editQuote }: Props) {
   const [customerAddress, setCustomerAddress] = useState(editQuote?.customer.address ?? '');
   const [project, setProject] = useState(editQuote?.customer.project ?? '');
   const [defaultMultiplier, setDefaultMultiplier] = useState(editQuote?.defaultMultiplier ?? 1.00);
-  const [itemIds, setItemIds] = useState<string[]>(() => editQuote?.items.map(i => i.id) ?? [uuid()]);
+  const [itemIds, setItemIds] = useState<string[]>(() => editQuote?.items.map(i => i.id) ?? []);
   const [itemMap, setItemMap] = useState<Record<string, QuoteItem | null>>({});
 
   useEffect(() => {
