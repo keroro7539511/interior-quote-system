@@ -112,13 +112,35 @@ export function calculateComponent(
       isFallback = true;
       fallbackKind = 'cell-empty';
     } else {
-      // beyond-all: take highest price cell and use its dims as effective max
-      const max = entries.reduce((a, b) => a[1] > b[1] ? a : b);
-      basePrice = max[1];
+      // beyond-all: find best reference cell and use its dims as effective max
       isFallback = true;
       fallbackKind = 'beyond-all';
-      // compute effective ratio based on max cell's dims
-      const maxParts = max[0].split(':');
+
+      let refEntry: [string, number];
+
+      if (component.type === 'door') {
+        // For doors, find the max H in the table, then pick the ceiling-W entry at that max H.
+        // This gives the correct base price for the given width when only H exceeds the table.
+        const maxH = Math.max(...entries.map(([k]) => Number(k.split(':')[1])));
+        const atMaxH = entries.filter(([k]) => {
+          const parts = k.split(':');
+          return Number(parts[1]) === maxH && Number(parts[0]) >= cW.tier;
+        });
+        if (atMaxH.length > 0) {
+          // pick minimum W at max H (ceiling match for width)
+          refEntry = atMaxH.reduce((a, b) =>
+            Number(a[0].split(':')[0]) <= Number(b[0].split(':')[0]) ? a : b
+          );
+        } else {
+          refEntry = entries.reduce((a, b) => a[1] > b[1] ? a : b);
+        }
+      } else {
+        refEntry = entries.reduce((a, b) => a[1] > b[1] ? a : b);
+      }
+
+      basePrice = refEntry[1];
+      // compute effective ratio based on reference cell's dims
+      const maxParts = refEntry[0].split(':');
       const effectiveDimValues: Partial<Record<'W' | 'H' | 'D', number>> = {};
       if (component.type === 'body') {
         effectiveDimValues.W = Number(maxParts[0]);
