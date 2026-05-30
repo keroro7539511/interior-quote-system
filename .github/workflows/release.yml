@@ -1,0 +1,28 @@
+name: 自動建置並發布
+
+on:
+  push:
+    tags:
+      - 'v*'          # 推送 v1.0.0、v1.0.1 等 tag 時觸發
+
+jobs:
+  build-windows:
+    runs-on: windows-latest
+
+    steps:
+      - name: 取得程式碼
+        uses: actions/checkout@v4
+
+      - name: 安裝 Node.js 20
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: 安裝相依套件
+        run: npm install
+
+      - name: 建置並發布 Windows 安裝檔
+        run: npm run electron:release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # GitHub 自動提供，不需手動設定

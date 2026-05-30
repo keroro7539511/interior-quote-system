@@ -34,6 +34,7 @@ export default function QuoteItemBuilder({
 }: Props) {
   const firstCat = categories[0];
   const [catId, setCatId] = useState(initialItem?.categoryId ?? firstCat?.id ?? '');
+  const [spaceName, setSpaceName] = useState(initialItem?.spaceName ?? '');
   const [W, setW] = useState(initialItem?.inputs.W ?? 600);
   const [H, setH] = useState(initialItem?.inputs.H ?? 1200);
   const [D, setD] = useState(initialItem?.inputs.D ?? 400);
@@ -85,6 +86,7 @@ export default function QuoteItemBuilder({
         id: itemId,
         categoryId: catId,
         categoryName: category.name,
+        spaceName: spaceName.trim() || undefined,
         inputs: { W, H, D },
         multiplier: itemMultiplier,
         body: bResult,
@@ -105,7 +107,7 @@ export default function QuoteItemBuilder({
       setCalcError((e as Error).message);
       setBodyResult(null); setAddonResults([]); onItemChange(null);
     }
-  }, [category, bodyComp, W, H, D, itemMultiplier, addonStates, catId]);
+  }, [category, bodyComp, W, H, D, itemMultiplier, addonStates, catId, spaceName]);
 
   useEffect(() => { recalculate(); }, [recalculate]);
 
@@ -138,6 +140,16 @@ export default function QuoteItemBuilder({
       <div className="p-5">
         {/* Inputs row */}
         <div className="flex flex-wrap gap-3 mb-4">
+          {/* 規劃空間名稱（報價單必填，如：臥室、洗衣間）*/}
+          <div>
+            <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">規劃空間</label>
+            <input
+              className={cn(inputCls, 'w-28')}
+              placeholder="如：臥室"
+              value={spaceName}
+              onChange={e => setSpaceName(e.target.value)}
+            />
+          </div>
           <div>
             <label className="block text-xs font-medium text-slate-500 dark:text-slate-400 mb-1">類別</label>
             <select className={inputCls} value={catId} onChange={e => setCatId(e.target.value)}>

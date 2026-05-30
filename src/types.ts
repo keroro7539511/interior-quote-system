@@ -50,6 +50,7 @@ export interface QuoteItem {
   id: string;
   categoryId: string;
   categoryName: string;
+  spaceName?: string;           // 規劃空間名稱，如「臥室」「洗衣間」
   inputs: { W: number; H: number; D: number };
   multiplier: number;
   body: ComponentCalcResult;

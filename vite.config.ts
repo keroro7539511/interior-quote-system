@@ -128,6 +128,7 @@ function seedSyncPlugin() {
 
 export default defineConfig({
   plugins: [react(), tailwindcss(), seedSyncPlugin()],
+  base: './',   // Electron 需要相對路徑
   test: {
     environment: 'node',
     globals: true,
