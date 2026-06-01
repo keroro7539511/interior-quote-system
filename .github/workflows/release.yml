@@ -3,7 +3,10 @@ name: 自動建置並發布
 on:
   push:
     tags:
-      - 'v*'          # 推送 v1.0.0、v1.0.1 等 tag 時觸發
+      - 'v*'
+
+permissions:
+  contents: write      # 允許建立 GitHub Release 並上傳檔案
 
 jobs:
   build-windows:
@@ -25,4 +28,4 @@ jobs:
       - name: 建置並發布 Windows 安裝檔
         run: npm run electron:release
         env:
-          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}   # GitHub 自動提供，不需手動設定
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
